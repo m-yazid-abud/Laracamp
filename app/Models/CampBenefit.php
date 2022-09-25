@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class camp_benefit extends Model
+class CampBenefit extends Model
 {
     use HasFactory;
 
