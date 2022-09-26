@@ -25,6 +25,6 @@ Route::get('/checkout', function () {
     return view('pages.front.checkout');
 })->name('checkout');
 
-Route::get('/success-checkout', function () {
+Route::post('/success-checkout', function () {
     return view('pages.front.success-checkout');
 })->name('success-checkout');
