@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,24 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('pages.front.index');
+})->name('index');
 
-Route::prefix("dev")->group(function () {
+Route::get('/login', function () {
+    return view('pages.front.login');
+})->name('login');
 
-    Route::get('/login/{id}', function (Request $request, User $id) {
-        Auth::login($id);
+Route::get('/checkout', function () {
+    return view('pages.front.checkout');
+})->name('checkout');
 
-        return redirect("/");
-    });
-
-    Route::get('/logout', function (Request $request) {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    });
-});
+Route::get('/success-checkout', function () {
+    return view('pages.front.success-checkout');
+})->name('success-checkout');
