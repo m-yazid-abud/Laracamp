@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CampSeeder::class,
             CampBenefitSeeder::class,
+            UserAdminSeeder::class,
         ]);
     }
 }
