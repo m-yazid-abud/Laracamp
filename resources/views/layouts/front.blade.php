@@ -5,7 +5,7 @@
     @include('includes.front.meta')
     @include('includes.front.style')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
 
     <title>{{ $title ?? 'Laracamp by BuiltWith Angga' }}</title>
 </head>

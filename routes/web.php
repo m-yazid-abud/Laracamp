@@ -17,9 +17,6 @@ Route::get('/', function () {
     return view('pages.front.index');
 })->name('index');
 
-Route::get('/login', function () {
-    return view('pages.front.login');
-})->name('login');
 
 Route::get('/checkout', function () {
     return view('pages.front.checkout');
@@ -28,3 +25,10 @@ Route::get('/checkout', function () {
 Route::post('/success-checkout', function () {
     return view('pages.front.success-checkout');
 })->name('success-checkout');
+
+Route::get(
+    "/dashboard",
+    fn () => view('dashboard')
+)->middleware(['auth'])->name('dashboard');
+
+require __DIR__ . '/auth.php';

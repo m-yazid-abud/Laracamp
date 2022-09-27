@@ -17,15 +17,13 @@ class UserAdminSeeder extends Seeder
     public function run()
     {
         $admin = [
-            [
-                'name' => "admin",
-                'email' => "admin@laracamp.develop",
-                'email_verified_at' => Date("Y-m-d H:i:s", time()),
-                'password' => Hash::make('password'),
-                'is_admin' => 1,
-            ],
+            'name' => "admin",
+            'email' => "admin@laracamp.develop",
+            'email_verified_at' => Date("Y-m-d H:i:s", time()),
+            'password' => Hash::make('password'),
+            'is_admin' => 1,
         ];
 
-        User::insert($admin);
+        User::create($admin);
     }
 }
