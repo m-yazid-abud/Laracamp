@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,5 +32,9 @@ Route::get(
     "/dashboard",
     fn () => view('dashboard')
 )->middleware(['auth'])->name('dashboard');
+
+Route::get('/auth/google/redirect',  [UserController::class, "handleGoogleLogin"])->name('login.user.google');
+
+Route::get('/auth/google/callback', [UserController::class, "handleGoogleLoginRedirect"]);
 
 require __DIR__ . '/auth.php';
