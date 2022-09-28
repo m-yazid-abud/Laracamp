@@ -22,8 +22,8 @@
                             <div class="item-bootcamp">
                                 <img src="{{ Vite::asset('resources/images/item_bootcamp.png') }}" alt=""
                                     class="cover">
-                                <h1 class="package">
-                                    GILA BELAJAR
+                                <h1 class="package text-uppercase">
+                                    {{ $camp->title }}
                                 </h1>
                                 <p class="description">
                                     Bootcamp ini akan mengajak Anda untuk belajar penuh mulai dari pengenalan dasar sampai
@@ -33,39 +33,37 @@
                         </div>
                         <div class="col-lg-1 col-12"></div>
                         <div class="col-lg-6 col-12">
-                            <form action="{{ route('success-checkout') }}" class="basic-form" method="POST">
+                            <form action="{{ route('order.store', $camp->id) }}" class="basic-form" method="POST">
                                 @csrf
                                 <div class="mb-4">
-                                    <label for="exampleInputEmail1" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ Auth()->user()->name }}">
                                 </div>
                                 <div class="mb-4">
-                                    <label for="exampleInputEmail1" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        value="{{ Auth()->user()->email }}">
                                 </div>
                                 <div class="mb-4">
-                                    <label for="exampleInputEmail1" class="form-label">Occupation</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                    <label for="occupation" class="form-label">Occupation</label>
+                                    <input type="text" class="form-control" id="occupation" name="occupation" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="exampleInputEmail1" class="form-label">Card Number</label>
-                                    <input type="number" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                    <label for="card_number" class="form-label">Card Number</label>
+                                    <input type="number" class="form-control" id="card_number" name="card_number" required>
                                 </div>
                                 <div class="mb-5">
                                     <div class="row">
                                         <div class="col-lg-6 col-12">
-                                            <label for="exampleInputEmail1" class="form-label">Expired</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1"
-                                                aria-describedby="emailHelp">
+                                            <label for="expired" class="form-label">Expired</label>
+                                            <input type="month" class="form-control" id="expired" name="expired"
+                                                required>
                                         </div>
                                         <div class="col-lg-6 col-12">
-                                            <label for="exampleInputEmail1" class="form-label">CVC</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1"
-                                                aria-describedby="emailHelp">
+                                            <label for="cvc" class="form-label">CVC</label>
+                                            <input type="text" class="form-control" id="cvc" name="cvc"
+                                                required maxlength="3">
                                         </div>
                                     </div>
                                 </div>

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{{ route('index') }}">
             <img src="{{ Vite::asset('resources/images/logo.png') }}" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -31,7 +31,7 @@
                         <img src="{{ Auth()->user()->avatar }}" class="user-photo rounded-circle" alt="">
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDashboard">
-                        <li><a class="dropdown-item" href="#">My Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">My Dashboard</a></li>
                         <li><a class="dropdown-item" href="#"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit()">Sign
                                 Out</a></li>
