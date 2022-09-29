@@ -5,6 +5,7 @@
 @section('content')
     <section class="dashboard my-5">
         <div class="container">
+            @include('components.alert')
             <div class="row text-left">
                 <div class=" col-lg-12 col-12 header-wrap mt-4">
                     <p class="story">

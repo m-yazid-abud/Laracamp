@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Order\Store;
+use App\Mail\User\Checkout\AfterCheckout;
 use App\Models\Camp;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -34,8 +37,11 @@ class OrderController extends Controller
      */
     public function create(Request $request, Camp $camp)
     {
+        if ($camp->isRegistered) {
+            return redirect("dashboard")->with("error", "You are already registered on <strong>$camp->title</strong> camp!");
+        }
         return view('pages.front.order.create', [
-            "camp" => $camp
+            "camp" => $camp,
         ]);
     }
 
@@ -45,7 +51,7 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $campId)
+    public function store(Store $request, $campId)
     {
         $data = $request->all();
 
@@ -53,13 +59,15 @@ class OrderController extends Controller
         $data['user_id'] = Auth::id();
         $data['date'] = $request->input("expired");
 
-        Order::create($data);
+        $order = Order::create($data);
 
-        $user = Auth::user();
+        $user = User::find(Auth::id());
         $user->email = $data['email'];
         $user->name = $data['name'];
         $user->occupation = $data['occupation'];
         $user->save();
+
+        Mail::to($user->email)->send(new AfterCheckout($order->camp->title, $user->name));
 
         return to_route('order.success');
     }
