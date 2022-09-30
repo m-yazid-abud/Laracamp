@@ -28,7 +28,12 @@
                     <a href="#" role="button" id="dropdownMenuDashboard" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         Halo, {{ Auth()->user()->name }}
-                        <img src="{{ Auth()->user()->avatar }}" class="user-photo rounded-circle" alt="">
+                        @if ($avatar = Auth()->user()->avatar)
+                            <img src="{{ $avatar }}" class="user-photo rounded-circle" alt="">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name=Admin" class="user-photo rounded-circle"
+                                alt="">
+                        @endif
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuDashboard">
                         <li><a class="dropdown-item" href="{{ route('dashboard') }}">My Dashboard</a></li>

@@ -38,7 +38,7 @@ class OrderController extends Controller
     public function create(Request $request, Camp $camp)
     {
         if ($camp->isRegistered) {
-            return redirect("dashboard")->with("error", "You are already registered on <strong>$camp->title</strong> camp!");
+            return redirect("user.dashboard")->with("error", "You are already registered on <strong>$camp->title</strong> camp!");
         }
         return view('pages.front.order.create', [
             "camp" => $camp,

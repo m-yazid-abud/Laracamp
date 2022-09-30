@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\CheckoutController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\UserController;
@@ -28,10 +31,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/order/{id}', [OrderController::class, "store"])->name('order.store');
     Route::resource('/order', OrderController::class)->except(['create', 'store']);
 
-    Route::get(
-        "dashboard",
-        [DashboardController::class, "index"]
-    )->name('dashboard');
+    Route::get('dashboard', [HomeController::class, "index"])->name("dashboard");
+
+    Route::name('admin.')->prefix('admin/dashboard')->middleware(['ensureUserRole:admin'])->group(function () {
+        Route::get('/', [AdminDashboardController::class, "index"])->name('dashboard');
+        Route::post('/checkout/{order}', [CheckoutController::class, "update"])->name('checkout.update');
+    });
+
+    Route::name('user.')->prefix('user/dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, "index"])->name("dashboard")->middleware('ensureUserRole:user');
+    });
 });
 
 Route::get('/auth/google/redirect',  [UserController::class, "handleGoogleLogin"])->name('login.user.google');
