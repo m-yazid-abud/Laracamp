@@ -68,6 +68,8 @@ class OrderController extends Controller
         $user = User::find(Auth::id());
         $user->email = $data['email'];
         $user->name = $data['name'];
+        $user->phone = $data['phone'];
+        $user->address = $data['address'];
         $user->occupation = $data['occupation'];
         $user->save();
 
@@ -133,20 +135,20 @@ class OrderController extends Controller
 
     protected function getSnapMidtransRedirect(Order $order)
     {
-
         $orderId = $order->id . "-" . Str::random(5);
         $price = $order->camp->price * 1000;
+        $order->midtrans_booking_code = $orderId;
 
         $transaction_details = [
             "order_id" => $orderId,
             "gross_amount" => $price,
         ];
 
-        $item_details = [
+        $item_details[] = [
             "id" => $order->camp_id,
             "price" => $price,
             "quantity" => 1,
-            "name" => $order->camp->name,
+            "name" => $order->camp->title,
         ];
 
         $userData = [
@@ -170,29 +172,32 @@ class OrderController extends Controller
         ];
 
         $snapRequestParams = [
-            $transaction_details,
-            $customer_details,
-            $item_details,
+            "transaction_details" => $transaction_details,
+            "customer_details" => $customer_details,
+            "item_details" => $item_details,
         ];
 
+        // dd($snapRequestParams);
+
         try {
-            $PaymentUrl = Midtrans\Snap::getSnapToken($snapRequestParams);
-            $order->midtrans_url = $PaymentUrl;
-            $order->midtrans_booking_code = $orderId;
+            $paymentUrl = Midtrans\Snap::createTransaction($snapRequestParams)->redirect_url;
+            $order->midtrans_url = $paymentUrl;
             $order->save();
 
-            return $PaymentUrl;
-        } catch (\Throwable $e) {
+            return $paymentUrl;
+        } catch (\Exception $e) {
             return false;
         }
     }
 
-    public function midtransCallback()
+    public function midtransCallback(Request $request)
     {
+        // $notif = $request->method() == "POST" ? new \Midtrans\Notification() : \Midtrans\Transaction::status($request->order_id);
         $notif = new \Midtrans\Notification();
 
         $transaction_status = $notif->transaction_status;
         $order_id = explode("-", $notif->order_id)[0];
+
         $order = Order::find($order_id);
         $fraud = $notif->fraud_status;
 
@@ -217,5 +222,9 @@ class OrderController extends Controller
         } else if ($transaction_status == 'expire') {
             $order->payment_status = "failed";
         }
+
+        $order->save();
+
+        return to_route('order.success');
     }
 }

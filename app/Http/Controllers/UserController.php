@@ -18,12 +18,12 @@ class UserController extends Controller
 
     public function handleGoogleLogin()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     public function handleGoogleLoginRedirect()
     {
-        $googleUser = Socialite::driver('google')->user();
+        $googleUser = Socialite::driver('google')->stateless()->user();
         $data = [
             "email" => $googleUser->getEmail(),
             "name" => $googleUser->getName(),

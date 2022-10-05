@@ -25,8 +25,8 @@ Route::get('/', function () {
     return view('pages.front.index');
 })->name('index');
 
-Route::get('payment/success', [UserController::class, "midtransCallback"]);
-Route::post('payment/success', [UserController::class, "midtransCallback"]);
+Route::get('payment/success', [OrderController::class, "midtransCallback"]);
+Route::post('payment/success', [OrderController::class, "midtransCallback"]);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/order/success', [OrderController::class, "success"])->name('order.success');

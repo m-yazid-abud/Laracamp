@@ -63,7 +63,8 @@
                                 <label for="occupation" class="form-label">Occupation</label>
                                 <input type="text"
                                     class="form-control {{ $errors->has('occupation') ? 'is-invalid' : '' }} "
-                                    id="occupation" name="occupation" value="{{ old('occupation') }}">
+                                    id="occupation" name="occupation"
+                                    value="{{ old('occupation', Auth::user()->occupation) }}">
 
                                 @if ($errors->has('occupation'))
                                     @foreach ($errors->get('occupation') as $error)
@@ -75,7 +76,7 @@
                             <div class="mb-4">
                                 <label for="phone" class="form-label">Phone</label>
                                 <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }} "
-                                    id="phone" name="phone" value="{{ old('phone') }}">
+                                    id="phone" name="phone" value="{{ old('phone', Auth::user()->phone) }}">
 
                                 @if ($errors->has('phone'))
                                     @foreach ($errors->get('phone') as $error)
@@ -88,7 +89,7 @@
                                 <label for="address" class="form-label">Address</label>
                                 <input type="text"
                                     class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }} " id="address"
-                                    name="address" value="{{ old('address') }}">
+                                    name="address" value="{{ old('address', Auth::user()->address) }}">
 
                                 @if ($errors->has('address'))
                                     @foreach ($errors->get('address') as $error)
