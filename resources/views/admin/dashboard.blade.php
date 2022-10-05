@@ -26,7 +26,6 @@
                             <th>Register Date</th>
                             <th>Price</th>
                             <th>Payment Status</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,20 +44,7 @@
                                     <strong>${{ $order->camp->price }},000</strong>
                                 </td>
                                 <td>
-                                    @if ($order->is_paid)
-                                        <span class="badge rounded-pill bg-success text-white py-2 px-4 fs-6">Paid</span>
-                                    @else
-                                        <span class="badge rounded-pill bg-warning text-dark py-2 px-4 fs-6">Not Paid</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if (!$order->is_paid)
-                                        <form action="{{ route('admin.checkout.update', $order->id) }}" method="post">
-                                            @csrf
-
-                                            <button type="submit" class="btn btn-success">Set Payment to Paid</button>
-                                        </form>
-                                    @endif
+                                    <strong>{{ $order->payment_status }}</strong>
                                 </td>
                             </tr>
                         @empty

@@ -37,14 +37,13 @@
                                     <strong>${{ $order->camp->price }},000</strong>
                                 </td>
                                 <td>
-                                    <strong><span class="{{ $order->is_paid ? 'text-green' : 'black' }}">
-                                            @if ($order->is_paid)
-                                                Payment Success
-                                            @else
-                                                Waiting for payment
-                                            @endif
-                                        </span></strong>
+                                    <strong>{{ $order->payment_status }}</strong>
                                 </td>
+                                @if ($order->payment_status == 'waiting')
+                                    <td>
+                                        <a href="{{ $order->midtrans_url }}" class="btn btn-primary">Pay Now</a>
+                                    </td>
+                                @endif
                                 <td>
                                     <a href="# " class="btn btn-primary ">
                                         Get Invoice
@@ -53,7 +52,7 @@
                             </tr>
                         @empty
                             <tr class="text-center">
-                                <td colspan="5"><strong>Tidak ada data</strong></td>
+                                <td colspan="5"><strong>No Camp Registered</strong></td>
                             </tr>
                         @endforelse
                     </tbody>

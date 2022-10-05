@@ -63,7 +63,8 @@
                                 <label for="occupation" class="form-label">Occupation</label>
                                 <input type="text"
                                     class="form-control {{ $errors->has('occupation') ? 'is-invalid' : '' }} "
-                                    id="occupation" name="occupation" value="{{ old('occupation') }}">
+                                    id="occupation" name="occupation"
+                                    value="{{ old('occupation', Auth::user()->occupation) }}">
 
                                 @if ($errors->has('occupation'))
                                     @foreach ($errors->get('occupation') as $error)
@@ -73,6 +74,31 @@
                             </div>
 
                             <div class="mb-4">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }} "
+                                    id="phone" name="phone" value="{{ old('phone', Auth::user()->phone) }}">
+
+                                @if ($errors->has('phone'))
+                                    @foreach ($errors->get('phone') as $error)
+                                        <p class="text-danger">{{ $error }}</p>
+                                    @endforeach
+                                @endif
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text"
+                                    class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }} " id="address"
+                                    name="address" value="{{ old('address', Auth::user()->address) }}">
+
+                                @if ($errors->has('address'))
+                                    @foreach ($errors->get('address') as $error)
+                                        <p class="text-danger">{{ $error }}</p>
+                                    @endforeach
+                                @endif
+                            </div>
+
+                            {{-- <div class="mb-4">
                                 <label for="card_number" class="form-label">Card Number</label>
                                 <input type="number"
                                     class="form-control {{ $errors->has('card_number') ? 'is-invalid' : '' }}"
@@ -83,9 +109,9 @@
                                         <p class="text-danger">{{ $error }}</p>
                                     @endforeach
                                 @endif
-                            </div>
+                            </div> --}}
 
-                            <div class="mb-5">
+                            {{-- <div class="mb-5">
                                 <div class="row">
                                     <div class="col-lg-6 col-12">
                                         <label for="expired" class="form-label">Expired</label>
@@ -114,7 +140,7 @@
                                     </div>
 
                                 </div>
-                            </div>
+                            </div> --}}
                             <button type="submit" class="w-100 btn btn-primary">Pay Now</button>
                             <p class="text-center subheader mt-4">
                                 <img src="{{ Vite::asset('resources/images/ic_secure.svg') }}" alt=""> Your
