@@ -186,4 +186,36 @@ class OrderController extends Controller
             return false;
         }
     }
+
+    public function midtransCallback()
+    {
+        $notif = new \Midtrans\Notification();
+
+        $transaction_status = $notif->transaction_status;
+        $order_id = explode("-", $notif->order_id)[0];
+        $order = Order::find($order_id);
+        $fraud = $notif->fraud_status;
+
+        if ($transaction_status == 'capture') {
+            if ($fraud == 'challenge') {
+                $order->payment_status = "pending";
+            } else if ($fraud == 'accept') {
+                $order->payment_status = "paid";
+            }
+        } else if ($transaction_status == 'cancel') {
+            if ($fraud == 'challenge') {
+                $order->payment_status = "failed";
+            } else if ($fraud == 'accept') {
+                $order->payment_status = "failed";
+            }
+        } else if ($transaction_status == 'deny') {
+            $order->payment_status = "failed";
+        } else if ($transaction_status == 'settlement') {
+            $order->payment_status = "paid";
+        } else if ($transaction_status == 'pending') {
+            $order->payment_status = "pending";
+        } else if ($transaction_status == 'expire') {
+            $order->payment_status = "failed";
+        }
+    }
 }
