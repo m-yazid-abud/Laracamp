@@ -192,8 +192,8 @@ class OrderController extends Controller
 
     public function midtransCallback(Request $request)
     {
-        // $notif = $request->method() == "POST" ? new \Midtrans\Notification() : \Midtrans\Transaction::status($request->order_id);
-        $notif = new \Midtrans\Notification();
+        $notif = $request->method() == "POST" ? new \Midtrans\Notification() : \Midtrans\Transaction::status($request->order_id);
+        // $notif = new \Midtrans\Notification();
 
         $transaction_status = $notif->transaction_status;
         $order_id = explode("-", $notif->order_id)[0];
