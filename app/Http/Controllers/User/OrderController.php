@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Midtrans;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -18,6 +20,11 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware(['auth']);
+
+        Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
+        Midtrans\Config::$isSanitized = env('MIDTRANS_IS_SANITIZED');
+        Midtrans\Config::$is3ds = env('MIDTRANS_IS_3DS');
     }
 
     /**
@@ -57,9 +64,6 @@ class OrderController extends Controller
 
         $data['camp_id'] = $campId;
         $data['user_id'] = Auth::id();
-        $data['date'] = $request->input("expired");
-
-        $order = Order::create($data);
 
         $user = User::find(Auth::id());
         $user->email = $data['email'];
@@ -67,10 +71,15 @@ class OrderController extends Controller
         $user->occupation = $data['occupation'];
         $user->save();
 
+        $order = Order::create($data);
+
+        $this->getSnapMidtransRedirect($order);
+
         Mail::to($user->email)->send(new AfterCheckout($order->camp->title, $user->name));
 
         return to_route('order.success');
     }
+
 
     /**
      * Display the specified resource.
@@ -120,5 +129,61 @@ class OrderController extends Controller
     public function success()
     {
         return view('pages.front.order.success');
+    }
+
+    protected function getSnapMidtransRedirect(Order $order)
+    {
+
+        $orderId = $order->id . "-" . Str::random(5);
+        $price = $order->camp->price * 1000;
+
+        $transaction_details = [
+            "order_id" => $orderId,
+            "gross_amount" => $price,
+        ];
+
+        $item_details = [
+            "id" => $order->camp_id,
+            "price" => $price,
+            "quantity" => 1,
+            "name" => $order->camp->name,
+        ];
+
+        $userData = [
+            "first_name" => $order->user->name,
+            "last_name" => "",
+            "email" => $order->user->email,
+            "phone" => $order->user->phone,
+            "address" => $order->user->address,
+            "city" => "",
+            "postal_code" => "",
+            "county_code" => "IDN",
+        ];
+
+        $customer_details = [
+            "first_name" => $order->user->name,
+            "last_name" => "",
+            "email" => $order->user->email,
+            "phone" => $order->user->phone,
+            "billing_address" => $userData,
+            "shipping_address" => $userData,
+        ];
+
+        $snapRequestParams = [
+            $transaction_details,
+            $customer_details,
+            $item_details,
+        ];
+
+        try {
+            $PaymentUrl = Midtrans\Snap::getSnapToken($snapRequestParams);
+            $order->midtrans_url = $PaymentUrl;
+            $order->midtrans_booking_code = $orderId;
+            $order->save();
+
+            return $PaymentUrl;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 }
