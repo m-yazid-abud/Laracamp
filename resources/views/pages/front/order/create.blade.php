@@ -72,6 +72,31 @@
                                 @endif
                             </div>
 
+                            <div class="mb-4">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }} "
+                                    id="phone" name="phone" value="{{ old('phone') }}">
+
+                                @if ($errors->has('phone'))
+                                    @foreach ($errors->get('phone') as $error)
+                                        <p class="text-danger">{{ $error }}</p>
+                                    @endforeach
+                                @endif
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text"
+                                    class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }} " id="address"
+                                    name="address" value="{{ old('address') }}">
+
+                                @if ($errors->has('address'))
+                                    @foreach ($errors->get('address') as $error)
+                                        <p class="text-danger">{{ $error }}</p>
+                                    @endforeach
+                                @endif
+                            </div>
+
                             {{-- <div class="mb-4">
                                 <label for="card_number" class="form-label">Card Number</label>
                                 <input type="number"

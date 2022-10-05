@@ -29,9 +29,11 @@ class Store extends FormRequest
         $id = Auth::id();
 
         return [
-            "name" => "required",
+            "name" => "required|string",
             "email" => "required|email|unique:users,email,$id",
-            "occupation" => "required",
+            "occupation" => "required|string",
+            "occupation" => "required|string",
+            "occupation" => "required|string",
             // "card_number" => "required|numeric|digits_between:8,16",
             // "expired" => [
             //     "required",
